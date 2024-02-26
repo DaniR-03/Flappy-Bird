@@ -11,6 +11,8 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
 
+
+
 int main(void) {
         /*
 	  This will set the peripheral bus clock to the same frequency
@@ -61,27 +63,7 @@ int main(void) {
 	// display_string(3, "Welcome!");
 	display_update();
 	
-	display_image(0, icon);
 	
-	// Skärmen går 32 rader ner och 128 rader åt höger. Om man vill rita en punkt längst till vänster på skärmen i mitten väljer man draw_pixel(15, 0). x är vilken rad, y är vilken column
-	// void draw_pixel(int x int y);
- 	// Ritar en pixel på punkten (x,y) vit.
-
-	// void draw_quad(int y1, int x1, int y2, int x2); 	 
-	// Ritar pixlarna inom två punkter (x1,y1) och (x2,y2) vita.
-	//Det blev lite fel x och y byttes oplats men om i quad så kommer först y - x - y - x värderna
-
-	
-
-	// //pipe1
-	// draw_quad(24,122, 32,127);
-	// //pipe 2
-	// draw_quad(0, 115, 11, 110);
-	// // //bird
-	
-
-	
-		
 	
 	
 	labinit(); /* Do any lab-specific initialization */

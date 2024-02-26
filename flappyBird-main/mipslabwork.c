@@ -15,6 +15,7 @@
 #include "mipslab.h" /* Declatations for these labs */
 #include <stdbool.h>
 
+
 #define timeP ((80000000 / 256) / 100) // 100 ms
 int mytime = 0x5957;
 int prime = 1234567;
@@ -27,13 +28,14 @@ char textstring[] = "text, more text, and even more text!";
 int timeoutcount = 0;
 int count = 0;
 int offset = 28;
-int current_x = 115;
-int current_x2 = 111;
+int current_x = 110;
+int current_x2 = 105;
 int current_y = 122;
 int current_y2 = 127;
 int count2 = 0;
-// int pipes[1] = {draw_quad(24,122--, 32, 127--), draw_quad(0, current_x++, 11, current_x2++) };
- int i;
+int i;
+bool alive = true;
+int flappy_direction = 1; //1 = neråt , -1 = uppåt , beroende på om man håller in knappen så ska detta ändra, om värdet är större accelererar den. 
 
 /* Interrupt Service Routine */
 void user_isr(void)
@@ -49,8 +51,10 @@ void user_isr(void)
   {
     IFSCLR(0) = IFS(0) & 0xffff7fff;
     timeoutcount++;
+    
     if(timeoutcount == 10){
       timeoutcount = 0;
+      
       // time2string(textstring, mytime);
       // display_string(3, textstring);
       // display_update();
@@ -59,33 +63,21 @@ void user_isr(void)
       // tick(&mytime);
       // offset = movment(offset);
       // display_update();
-      // display_image(offset, icon);
-     
-      // for(i = 0; i < 2; i++){
-      //   count2 ++;
-      //   if(count2 == 7){
-      //     pipes[i];
-      //     // current_x --;
-      //     // current_x2 --;
-
-      //     // current_y --;
-      //     // current_y2 --;
-
-      //   }
-      //   if(i == 1){
-      //     i = 0;
-      //   }
-       
-      display_image(0, icon);
-      //pipe1
-      draw_quad(0, current_x, 11, current_x2);
-      current_x --;
-      current_x2 --;
-      //pipe 2 
-      draw_quad(24,current_y, 32, current_y2);
-      current_y --;
-      current_y2 --;   
-    
+      // display_image(offset, icon); 
+	
+	
+ 
+  if(alive){      //sålänge alive är true så kommer en över och under border ritas och iconen rörsig, sen kollar check_collision om nån av pixlarna på iconen och bordersarna nuddar varandra och då stannar spelet
+    display_clear();
+    draw_border(0);
+    draw_border(31);
+    move_icon(flappyrow, flappycol, flappyrow_border, flappycol_border,flappy_direction,0);
+    if(check_collision()){ //
+    alive = false;
+    move_icon(flappyrow, flappycol, flappyrow_border, flappycol_border,-flappy_direction,0); 
+  }
+	  draw_icon(flappyrow,flappycol);
+  }
 
    }      
   }

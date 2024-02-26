@@ -8,13 +8,20 @@
    For copyright and licensing, see file COPYING */
 
 /* Declare display-related functions from mipslabfunc.c */
+#include <stdbool.h>
+
 void display_image(int x, const uint8_t *data);
 void display_pixel(int row, int col, int val);
 void draw_pixel(int x, int y);
 void draw_quad(int x1, int y1, int x2, int y2);
+void draw_icon(uint8_t* data_row, uint8_t* data_col);
+void move_icon(uint8_t* data_row, uint8_t* data_col, uint8_t* border_row, uint8_t* border_col, int row, int col);
 void display_init(void);
 void display_string(int line, char *s);
 void display_update(void);
+bool check_collision(void);
+void display_clear(void);
+void draw_border(int row);
 uint8_t spi_send_recv(uint8_t data);
 
 /* Declare lab-related functions from mipslabfunc.c */
@@ -43,6 +50,17 @@ extern const uint8_t const font[128*8];
 /* Declare bitmap array containing icon */
 extern const uint8_t const icon[512];
 
+
+const uint8_t flappy_size;
+const uint8_t flappyborder_size;
+extern uint8_t flappyrow[16];
+extern uint8_t flappycol[16];
+
+extern uint8_t flappyrow_border[12];
+extern uint8_t flappycol_border[12];
+
+extern uint8_t titleslime_row[178];
+extern uint8_t titleslime_col[178];
 
 
 extern const int decimalPosToBinary[8];

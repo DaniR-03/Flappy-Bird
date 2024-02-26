@@ -7,6 +7,7 @@
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
+#include <stdbool.h>
 
 /* Declare a helper function which is local to this file */
 static void num32asc( char * s, int ); 
@@ -24,7 +25,7 @@ static void num32asc( char * s, int );
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
 
 
-uint8_t myArray[1024] = {0};
+uint8_t myArray[1024] = {0};  //nuvarande pixel värden, alltså vad som är på och av på skärmen 
 
 /* quicksleep:
    A simple function to create a small delay.
@@ -83,7 +84,7 @@ void tick( unsigned int * timep )
    repeated calls to display_image; display_image overwrites
    about half of the digits shown by display_debug.
 */   
-void display_debug( volatile int * const addr )
+void display_debug( volatile int * const addr )   //deras kod
 {
   display_string( 1, "Addr" );
   display_string( 2, "Data" );
@@ -92,14 +93,14 @@ void display_debug( volatile int * const addr )
   display_update();
 }
 
-uint8_t spi_send_recv(uint8_t data) {
+uint8_t spi_send_recv(uint8_t data) {   //deras kod
 	while(!(SPI2STAT & 0x08));
 	SPI2BUF = data;
 	while(!(SPI2STAT & 1));
 	return SPI2BUF;
 }
 
-void display_init(void) {
+void display_init(void) { //deras kod
         DISPLAY_CHANGE_TO_COMMAND_MODE;
 	quicksleep(10);
 	DISPLAY_ACTIVATE_VDD;
@@ -129,7 +130,7 @@ void display_init(void) {
 	spi_send_recv(0xAF);
 }
 
-void display_string(int line, char *s) {
+void display_string(int line, char *s) { //deras kod
 	int i;
 	if(line < 0 || line >= 4)
 		return;
@@ -144,7 +145,7 @@ void display_string(int line, char *s) {
 			textbuffer[line][i] = ' ';
 }
 
-void display_image(int x, const uint8_t *data) {
+void display_image(int x, const uint8_t *data) { //deras kod
 	int i, j;
 	
 	for(i = 0; i < 4; i++) {
@@ -163,7 +164,21 @@ void display_image(int x, const uint8_t *data) {
 	}
 }
 
-void display_pixel(int row, int col, int val) {
+void draw_pixel(int row, int col){  // ritar en pixel på den row och col koordinat man skickar in, row∈[0,31], col∈[0,127]
+  if(row < 0) { row = 0; }
+  if(row > 31) { row = 31; }
+
+  if(col < 0) { col = 0; }
+  if(col > 127) { col = 127; }
+
+  int rowIndex = row / 8;
+  int binary = row % 8;
+
+  display_pixel(rowIndex, col, decimalPosToBinary[binary]);
+
+}
+
+void display_pixel(int row, int col, int val) { //översätter drawpixel till maskinspråk :)
     uint8_t x = myArray[row*128 + col];
     x = x | val;
     myArray[row*128 + col] = x;
@@ -186,22 +201,64 @@ void display_pixel(int row, int col, int val) {
     spi_send_recv(myArray[row*128 + col]);
 }
 
-
-void draw_pixel(int x, int y){
-  if(x < 0) { x = 0; }
-  if(x > 31) { x = 31; }
-
-  if(y < 0) { y = 0; }
-  if(y > 127) { y = 127; }
-
-  int rowIndex = x / 8;
-  int daniella = x % 8;
-
-  display_pixel(rowIndex, y, decimalPosToBinary[daniella]);
-
+void draw_icon(uint8_t* data_row, uint8_t* data_col){   //ritar hela iconen med hjälp av en forloop som loopar igenom varje pixel man har på rows och columner så att hela iconen kan displayas
+  int i;
+  for(i = 0; i < flappy_size; i++){
+    draw_pixel(data_row[i], data_col[i]);
+  }
 }
 
-void draw_quad(int x1, int y1, int x2, int y2){
+void move_icon(uint8_t* data_row, uint8_t* data_col, uint8_t* border_row, uint8_t* border_col, int rowmovment, int colmovment){  // flyttar hela ikonen genom att lägga till det vi skickar in i row- /colmovment i iconens rows och col pixlar. 
+  int i;
+  for(i = 0; i < flappy_size; i++){
+    data_row[i] += rowmovment;
+    data_col[i] += colmovment;
+  }
+  for(i = 0; i < flappyborder_size; i++){
+    border_row[i] += rowmovment;
+    border_col[i] += colmovment;
+  }
+}
+
+bool check_collision(){ // kollar om de px högst upp och längst ner på slimen är på samma rad som taket eller golvet och ändrar till collision true
+  if(flappyrow[9] <= 4 || flappyrow[1] >= 30){
+    return true; 
+  }
+  return false;
+}
+
+void draw_border(int row){
+  int i;
+  for(i = 0; i < 128; i++){
+    draw_pixel(row, i);
+  }
+}
+
+void display_clear() {  // clearar alla px på skärmen till svart 
+	int i, j;
+for(i = 0; i < 1024; i++){
+  myArray[i] = 0;
+
+}
+	for(i = 0; i < 4; i++) {
+		DISPLAY_CHANGE_TO_COMMAND_MODE;
+
+		spi_send_recv(0x22);
+		spi_send_recv(i);
+		
+		spi_send_recv(0 & 0xF);
+		spi_send_recv(0x10 | ((0 >> 4) & 0xF)); 
+		
+		DISPLAY_CHANGE_TO_DATA_MODE;
+		
+		for(j = 0; j < 128; j++)
+			spi_send_recv(0);
+	}
+}
+
+
+
+void draw_quad(int x1, int y1, int x2, int y2){ //outdated  DO NOT USE!!!
   int i, j;
   
   int istart = x1;
