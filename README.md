@@ -1,4 +1,4 @@
-Jag dödpe spelet till flappy slime för det var lite för korngligt att rita en hel fågel eller nått annat så kanske hermade han taco snubben förutom med två ögon :)
+Jag döpte spelet till flappy slime för det var lite för korngligt att rita en hel fågel eller nått annat så kanske hermade han taco snubben förutom med två ögon :)
 
 Det blev lite ändringar, nu är det enklare att röra olika iconer upp och ner och till sidan, innan var det lite hackigt. 
 Nu för att skapa en icon så skapar man två uint8_t grejer i mipslabsdata där en innehåller rader (rows) och den andra innehåller kolummner(col)
