@@ -9,6 +9,7 @@
 #include "mipslab.h"  /* Declatations for these labs */
 #include <stdbool.h>
 
+
 /* Declare a helper function which is local to this file */
 static void num32asc( char * s, int ); 
 
@@ -201,30 +202,62 @@ void display_pixel(int row, int col, int val) { //översätter drawpixel till ma
     spi_send_recv(myArray[row*128 + col]);
 }
 
-void draw_icon(uint8_t* data_row, uint8_t* data_col){   //ritar hela iconen med hjälp av en forloop som loopar igenom varje pixel man har på rows och columner så att hela iconen kan displayas
+void draw_icon(uint8_t* data_row, uint8_t* data_col, int size){   //ritar hela iconen med hjälp av en forloop som loopar igenom varje pixel man har på rows och columner så att hela iconen kan displayas
   int i;
-  for(i = 0; i < flappy_size; i++){
+  for(i = 0; i < size; i++){
     draw_pixel(data_row[i], data_col[i]);
   }
 }
 
-void move_icon(uint8_t* data_row, uint8_t* data_col, uint8_t* border_row, uint8_t* border_col, int rowmovment, int colmovment){  // flyttar hela ikonen genom att lägga till det vi skickar in i row- /colmovment i iconens rows och col pixlar. 
+void move_icon(uint8_t* data_row, uint8_t* data_col, uint8_t* border_row, uint8_t* border_col,int iconsize, int bordersize, int rowmovment, int colmovment){  // flyttar hela ikonen genom att lägga till det vi skickar in i row- /colmovment i iconens rows och col pixlar. 
   int i;
-  for(i = 0; i < flappy_size; i++){
+  for(i = 0; i < iconsize; i++){ //kanske måste lägga till en ny size så att de fungerar på pipsen 
     data_row[i] += rowmovment;
     data_col[i] += colmovment;
   }
-  for(i = 0; i < flappyborder_size; i++){
+  for(i = 0; i < bordersize; i++){ //same
     border_row[i] += rowmovment;
     border_col[i] += colmovment;
+  }
+}
+
+void move_titlescrean(uint8_t* data_row, uint8_t* data_col, int size, int rowmovement, int colmovment){
+  int i;
+  for(i = 0; i < size; i++){
+    data_row[i] += rowmovement;
+    data_col[i] += colmovment;
   }
 }
 
 bool check_collision(){ // kollar om de px högst upp och längst ner på slimen är på samma rad som taket eller golvet och ändrar till collision true
   if(flappyrow[9] <= 4 || flappyrow[1] >= 30){
     return true; 
-  }
+  }  
   return false;
+}
+
+bool check_collisionpipes(uint8_t* piperow, uint8_t* pipecol){
+  int i;
+  for(i = 0; i <= 18; i++){
+    int deltarow = flappyrow_border[1] - piperow[i];
+    int deltacol = pipecol[i] - flappycol_border[1];
+    if(deltarow < 5 && deltarow >= 0 && deltacol < 7 && deltacol >= 0){
+        return true;
+    }
+  //   double k = (flappyrow_border[1]-piperow[i])/5; 
+  //   double l = (flappycol_border[1]-pipecol[i])/7;
+  // if(k < 0){
+  //   k = -k;
+  // }
+  // if(l < 0){
+  //   l = -l;
+  // }  
+   
+  //   if(k > 0.0 && k < 1.0 && l > 0.0 && l < 1.0){
+  //     return true;
+  //   }
+  }
+  return false; 
 }
 
 void draw_border(int row){
@@ -233,6 +266,8 @@ void draw_border(int row){
     draw_pixel(row, i);
   }
 }
+
+
 
 void display_clear() {  // clearar alla px på skärmen till svart 
 	int i, j;

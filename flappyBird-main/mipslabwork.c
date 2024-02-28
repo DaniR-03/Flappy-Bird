@@ -35,7 +35,7 @@ int current_y2 = 127;
 int count2 = 0;
 int i;
 bool alive = true;
-int flappy_direction = 1; //1 = neråt , -1 = uppåt , beroende på om man håller in knappen så ska detta ändra, om värdet är större accelererar den. 
+int flappy_direction = 0; //1 = neråt , -1 = uppåt , beroende på om man håller in knappen så ska detta ändra, om värdet är större accelererar den. 
 
 /* Interrupt Service Routine */
 void user_isr(void)
@@ -66,19 +66,42 @@ void user_isr(void)
       // display_image(offset, icon); 
 	
 	
- 
+    count2 ++;
   if(alive){      //sålänge alive är true så kommer en över och under border ritas och iconen rörsig, sen kollar check_collision om nån av pixlarna på iconen och bordersarna nuddar varandra och då stannar spelet
-    display_clear();
+ 
+  display_clear();
     draw_border(0);
     draw_border(31);
-    move_icon(flappyrow, flappycol, flappyrow_border, flappycol_border,flappy_direction,0);
-    if(check_collision()){ //
+    draw_icon(flappyrow,flappycol,16);
+    if (count2 < 2){
+      move_icon(flappyrow, flappycol, flappyrow_border, flappycol_border,16,12,-12,0);
+    }
+    move_icon(flappyrow, flappycol, flappyrow_border, flappycol_border,16,12,-0,0);
+    draw_icon(pipe3_row, pipe3_col,18);
+    draw_icon(pipe1_row, pipe1_col,28);
+    move_icon(pipe3_row,pipe3_col, pipe3border_row, pipe3border_col,18,10,-0,-1); 
+    move_icon(pipe1_row,pipe1_col, pipe1border_row, pipe1border_col,28,15,-0,-1); 
+     
+    if(check_collisionpipes(pipe3_row,pipe3_col)){ //
     alive = false;
-    move_icon(flappyrow, flappycol, flappyrow_border, flappycol_border,-flappy_direction,0); 
+     
+    }
+	 
   }
-	  draw_icon(flappyrow,flappycol);
-  }
+      
+      // draw_icon(flappyrow,flappycol, 16);
+      // move_icon(flappyrow, flappycol, flappyrow_border, flappycol_border,16,12,-0,0); 
+      // display_clear();
+      // draw_icon(titleslime_row, titleslime_col,178);
+      
+      // move_titlescrean(titleslime_row, titleslime_col, 178, -flappy_direction, 0);
+     
+      // draw_icon(pipe3_row, pipe3_col,18);
+      // draw_icon(pipe1_row, pipe1_col,28);
 
+      
+
+      
    }      
   }
 }

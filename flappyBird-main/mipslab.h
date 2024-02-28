@@ -14,12 +14,14 @@ void display_image(int x, const uint8_t *data);
 void display_pixel(int row, int col, int val);
 void draw_pixel(int x, int y);
 void draw_quad(int x1, int y1, int x2, int y2);
-void draw_icon(uint8_t* data_row, uint8_t* data_col);
-void move_icon(uint8_t* data_row, uint8_t* data_col, uint8_t* border_row, uint8_t* border_col, int row, int col);
+void draw_icon(uint8_t* data_row, uint8_t* data_col, int size);
+void move_icon(uint8_t* data_row, uint8_t* data_col, uint8_t* border_row, uint8_t* border_col,int iconsize, int bordersize, int rowmovment, int colmovment);
+void move_titlescrean(uint8_t* data_row, uint8_t* data_col, int size, int rowmovement, int colmovment);
 void display_init(void);
 void display_string(int line, char *s);
 void display_update(void);
 bool check_collision(void);
+bool check_collisionpipes(uint8_t* piperow, uint8_t* pipecol);
 void display_clear(void);
 void draw_border(int row);
 uint8_t spi_send_recv(uint8_t data);
@@ -58,6 +60,24 @@ extern uint8_t flappycol[16];
 
 extern uint8_t flappyrow_border[12];
 extern uint8_t flappycol_border[12];
+//pipes
+extern uint8_t pipe1_row[28];
+extern uint8_t pipe1_col[28];
+extern uint8_t pipe2_row[26];
+extern uint8_t pipe2_col[26];
+extern uint8_t pipe3_row[18];
+extern uint8_t pipe3_col[18];
+extern uint8_t pipe4_row[26];
+extern uint8_t pipe4_col[26];
+
+extern uint8_t pipe1border_row[15]; 
+extern uint8_t pipe1border_col[15]; 
+extern uint8_t pipe2border_row[14]; 
+extern uint8_t pipe2border_col[14]; 
+extern uint8_t pipe3border_row[10]; 
+extern uint8_t pipe3border_col[10]; 
+extern uint8_t pipe4border_row[14]; 
+extern uint8_t pipe4border_col[14]; 
 
 extern uint8_t titleslime_row[178];
 extern uint8_t titleslime_col[178];
