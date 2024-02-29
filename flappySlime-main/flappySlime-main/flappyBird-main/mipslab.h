@@ -73,14 +73,16 @@ extern uint8_t pipe3_row[18];
 extern uint8_t pipe3_col[18];
 extern uint8_t pipe4_row[26];
 extern uint8_t pipe4_col[26];
-extern uint8_t pipe5_row[37];
-extern uint8_t pipe5_col[37];
+extern uint8_t pipe5_row[38];
+extern uint8_t pipe5_col[38];
 extern uint8_t pipe6_row[48];
 extern uint8_t pipe6_col[48];
 extern uint8_t pipe7_row[14];
 extern uint8_t pipe7_col[14];
 extern uint8_t pipe8_row[46];
 extern uint8_t pipe8_col[46];
+extern uint8_t pipe9_row[10];
+extern uint8_t pipe9_col[10];
 
 
 extern uint8_t pipe1border_row[15]; 

@@ -141,14 +141,14 @@ void user_isr(void)
             if (count2 >  40)
             {
               draw_icon(pipe2_row, pipe2_col,26);
-              move_icon(pipe2_row,pipe2_col, pipe2border_row, pipe2border_col,26,14,-0,-1);
-              draw_icon(pipe4_row, pipe4_col,26);
-              move_icon(pipe4_row,pipe4_col, pipe4border_row, pipe4border_col,26,14,-0,-1);
+              move_icon(pipe2_row,pipe2_col, pipe2border_row, pipe2border_col,26,10,-0,-1);
+              draw_icon(pipe3_row, pipe3_col,18);
+              move_icon(pipe3_row,pipe3_col, pipe3border_row, pipe3border_col,28,10,-0,-1);
 
               if(count2 % 158 == 0){
                 display_clear();
                 move_icon(pipe2_row,pipe2_col, pipe2border_row, pipe2border_col,22,14,-0,128);
-                move_icon(pipe4_row,pipe4_col, pipe4border_row, pipe4border_col,26,14,-0,128);
+                move_icon(pipe3_row,pipe3_col, pipe3border_row, pipe3border_col,18,10,-0,128);
               }
               
             }
@@ -164,12 +164,13 @@ void user_isr(void)
                  draw_icon(pipe6_row, pipe6_col,48);
                  move_titlescrean(pipe6_row,pipe6_col,48,0,-1);                         
                  
-                 if(count2 % 128 == 0){
+                 if(count2 % 188 == 0){
                   display_clear();
                 // move_icon(pipe1_row,pipe1_col, pipe1border_row, pipe1border_col,28,15,-0,128);
                    move_titlescrean(pipe6_row,pipe6_col,48,0,128);            
 
                
+                  }
               }
 
                  if (count2 > 100)
@@ -179,12 +180,34 @@ void user_isr(void)
                 draw_icon(pipe7_row, pipe7_col,14);
                 move_titlescrean(pipe7_row,pipe7_col,14,0,-1); 
 
-                if(count2 % 235 == 0){
+                if(count2 % 218 == 0){
                     display_clear();
                     move_icon(pipe4_row,pipe4_col, pipe4border_row, pipe4border_col,26,14,-0,128);
                     move_titlescrean(pipe7_row,pipe7_col,14,0,128); 
                   }
                 }
+
+              if(count2 > 130){
+                draw_icon(pipe8_row, pipe8_col,46);
+                move_titlescrean(pipe8_row,pipe8_col,46,0,-1); 
+            // draw_icon(pipe5_row, pipe5_col,37);
+             if(count2 % 248 == 0){
+                display_clear();
+                move_titlescrean(pipe8_row,pipe8_col,46,0,128);
+              }
+              }
+
+              if(count2 > 160){
+                  draw_icon(pipe5_row, pipe5_col,38);
+                  draw_icon(pipe9_row, pipe9_col,10);
+                  move_titlescrean(pipe5_row,pipe5_col,38,0,-1);                   
+                  move_titlescrean(pipe9_row,pipe9_col,10,0,-1);
+
+                  if(count2 % 278 == 0){
+                    move_titlescrean(pipe5_row,pipe5_col,38,0,128);                   
+                    move_titlescrean(pipe9_row,pipe9_col,10,0,128); 
+                  }
+              }
           // if (count2 > 127)
           // {
           //   count2 = 0; //mova de med count stycken steg typ
